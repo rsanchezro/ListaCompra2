@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="a0">
+        <item>Azucar</item>
+        <item>1.20</item>
+        <item>@drawable/azucar</item>
+    </array>
+    <array name="a1">
+        <item>Cafe</item>
+        <item>2.55</item>
+        <item>@drawable/cafe</item>
+    </array>
+    <array name="a2">
+        <item>Detergente</item>
+        <item>8.35</item>
+        <item>@drawable/detergente</item>
+    </array>
+    <array name="a3">
+        <item>Fruta</item>
+        <item>2.20</item>
+        <item>@drawable/fruta</item>
+    </array>
+    <array name="a4">
+        <item>Galletas</item>
+        <item>1.95</item>
+        <item>@drawable/galletas</item>
+    </array>
+    <array name="a5">
+        <item>Garbanzos</item>
+        <item>2.60</item>
+        <item>@drawable/garbanzos</item>
+    </array>
+    <array name="a6">
+        <item>Leche</item>
+        <item>0.70</item>
+        <item>@drawable/leche</item>
+    </array>
+    <array name="a7">
+        <item>Pan-Hogaza</item>
+        <item>2.5</item>
+        <item>@drawable/pan</item>
+    </array>
+    <array name="a8">
+        <item>Papel-Higienico</item>
+        <item>4.50</item>
+        <item>@drawable/papelhigienico</item>
+    </array>
+    <array name="a9">
+        <item>Pasta</item>
+        <item>0.95</item>
+        <item>@drawable/pasta</item>
+    </array>
+    <array name="a10">
+        <item>Cacao</item>
+        <item>5.45</item>
+        <item>@drawable/cacao</item>
+    </array>
+    <array name="a11">
+        <item>Tomate-Frito</item>
+        <item>0.6</item>
+        <item>@drawable/tomatefrito</item>
+    </array>
+    <array name="a12">
+        <item>Zumo</item>
+        <item>1.10</item>
+        <item>@drawable/zumo</item>
+    </array>
+    <array name="array_productos">
+        <item>@array/a0</item>
+        <item>@array/a1</item>
+        <item>@array/a2</item>
+        <item>@array/a3</item>
+        <item>@array/a4</item>
+        <item>@array/a5</item>
+        <item>@array/a6</item>
+        <item>@array/a7</item>
+        <item>@array/a8</item>
+        <item>@array/a9</item>
+        <item>@array/a10</item>
+        <item>@array/a11</item>
+        <item>@array/a12</item>
+    </array>
+</resources>

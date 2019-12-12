@@ -18,6 +18,7 @@ import java.util.ArrayList;
 public class Adaptador_ListaCompra extends RecyclerView.Adapter<Adaptador_ListaCompra.Miholder> {
     private ArrayList<ListaCompra> datos;
     private Context ctx;
+    private ListaCompraFragment fragmento;
     private int recursoLayout;
     private View.OnClickListener onClick;
     private View.OnLongClickListener onLongClick;
@@ -28,6 +29,8 @@ public class Adaptador_ListaCompra extends RecyclerView.Adapter<Adaptador_ListaC
 
     public Adaptador_ListaCompra(ListaCompraFragment c, int rlayout, ArrayList<ListaCompra> d)
     {
+        this.fragmento=c;
+
         this.ctx=c.getActivity();
         this.datos=d;
         this.recursoLayout=rlayout;
@@ -86,16 +89,16 @@ public class Adaptador_ListaCompra extends RecyclerView.Adapter<Adaptador_ListaC
         Log.i("Informacion","Metodo bind"+position);
         //Este metodo se invocara tantas veces como elementos se vayan visualizando
         //Vinculo los datos del alumno que voy a tratar
-        holder.alumno=this.datos.get(position);
+        holder.listacompra=this.datos.get(position);
         //Asocio los datos de los elementos visuales
-        holder.matricula.setText(holder.alumno.getNummatricula()+"");
-        holder.nombre.setText(holder.alumno.getNombre());
-        holder.foto.setImageResource(holder.alumno.getFoto());
+        holder.nombre.setText(holder.listacompra.getNombre_lista()+"");
+        holder.num_articulos.setText(holder.listacompra.getNum_productos());
+        holder.importe_total.setText(holder.listacompra.getImporte_total()+"");
         holder.vista.setBackgroundResource(R.color.colorFondoElemento);
         //Cambio el color de fondo en funcion de si el elemento esta seleccionado o
 
-        if(this.ctx.actionModeactivado) {
-            if (this.ctx.alumnosseleccionados.contains(holder.alumno)) {
+        if(this.fragmento.isActionModeactivado()) {
+            if (fragmento.getListadocomprasdatos().contains(holder.listacompra)) {
                 holder.vista.setBackgroundResource(R.color.colorFondoElementoSeleccionado);
             }
         }
@@ -111,15 +114,15 @@ public class Adaptador_ListaCompra extends RecyclerView.Adapter<Adaptador_ListaC
     public class Miholder extends ViewHolder{
         public View vista;
         public TextView nombre;
-        public TextView matricula;
-        public ImageView foto;
-        public ListaCompra alumno;
+        public TextView num_articulos;
+        public TextView importe_total;
+        public ListaCompra listacompra;
         public Miholder(View v){
             super(v);
             this.vista=v;
-            this.nombre=this.vista.findViewById(R.id.nombre);
-            this.matricula=this.vista.findViewById(R.id.matricula);
-            this.foto=this.vista.findViewById(R.id.imagenAlumno);
+            this.nombre=this.vista.findViewById(R.id.nombre_listacompra_txtview);
+            this.num_articulos=this.vista.findViewById(R.id.num_pdtos_listcompra_txtview);
+            this.importe_total=this.vista.findViewById(R.id.importe_listacompra_txtview);
 
 
         }

@@ -1,8 +1,12 @@
 package com.roberto.listacompra2;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -12,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 
@@ -21,10 +26,49 @@ import java.util.ArrayList;
 public class ListaCompraFragment extends Fragment {
 
     private RecyclerView listado_de_compras_recycler;
-    private ArrayList<ListaCompra> listadocomprasdatos;
-    private Adaptador_ListaCompra adaptadorlistacompra;
-    private boolean actionModeactivado;
 
+    public ArrayList<ListaCompra> getListadocomprasdatos() {
+        return listadocomprasdatos;
+    }
+
+    public void setListadocomprasdatos(ArrayList<ListaCompra> listadocomprasdatos) {
+        this.listadocomprasdatos = listadocomprasdatos;
+    }
+
+    private ArrayList<ListaCompra> listadocomprasdatos;
+    private ArrayList<ListaCompra> comprasseleccionadas;
+    private Adaptador_ListaCompra adaptadorlistacompra;
+
+    public boolean isActionModeactivado() {
+        return actionModeactivado;
+    }
+
+    public void setActionModeactivado(boolean actionModeactivado) {
+        this.actionModeactivado = actionModeactivado;
+    }
+
+    private boolean actionModeactivado;
+    private MainActivity actividadprincipal;
+
+    public Toolbar getBarra() {
+        return barra;
+    }
+
+    public void setBarra(Toolbar barra) {
+        this.barra = barra;
+    }
+
+    private Toolbar barra;
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        comprasseleccionadas=new ArrayList<ListaCompra>();
+        barra=getActivity().findViewById(R.id.toolbar);
+        actividadprincipal=(MainActivity)getActivity();
+
+    }
 
     public ListaCompraFragment() {
         // Required empty public constructor
@@ -41,9 +85,25 @@ public class ListaCompraFragment extends Fragment {
         prepararRecyclerView(v);
 
 
+
     return v;
     }
 
+    private void salir_actionmode()
+    {
+        comprasseleccionadas.clear();
+        actionModeactivado=false;
+        //Limpio el menu y restablezco los estilos
+        barra.setBackgroundResource(R.color.colorPrimary);
+        barra.setTitleTextAppearance(actividadprincipal,R.style.barra);
+        barra.setTitle(R.string.titulobarraprincipal);
+        actividadprincipal.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        barra.getMenu().clear();
+
+
+        //notificar de los cambios en el adapatador
+        adaptadorlistacompra.notifyDataSetChanged();
+    }
     private void prepararRecyclerView(View v)
     {
         listado_de_compras_recycler=v.findViewById(R.id.recycler_listado_compras);
@@ -63,22 +123,24 @@ public class ListaCompraFragment extends Fragment {
                 {//Solo inflo el menu si no esta el actionmodeactivado
                     actionModeactivado = true;
 
-                    //Invoco a un metodo de mainActivity para inflar la barra, le paso la barra
+                    //Limpio la barra
+
+                    //Inflo el menu de acción contextual
                     barra.inflateMenu(R.menu.menu_action_mode);
                     //Cambio el estilo de la barra
                     barra.setBackgroundColor(Color.BLACK);
-                    barra.setTitleTextAppearance(Listado_alumnos.this,R.style.estiloActionpersonalizado);
+                    barra.setTitleTextAppearance(getActivity(),R.style.estiloActionpersonalizado);
 
                     //Seleccionar el elemento sobre el que se ha pulsado
 
                     seleccionar_Elemento(posicion);
                     //Actualizco el numero de elementos seleccionados
                     //Repinto el elemento
-                    adaptadorAlumnos.notifyItemChanged(posicion);
+                    adaptadorlistacompra.notifyItemChanged(posicion);
                     //Incluir icono de flecha hacia atras
-                    if (getSupportActionBar() != null) {
-                        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_white_24dp);
-                        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                    if ((actividadprincipal.getSupportActionBar() != null)) {
+                        actividadprincipal.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_white_24dp);
+                        actividadprincipal.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                     }
                     actualizar_barra();
                 }
@@ -96,9 +158,9 @@ public class ListaCompraFragment extends Fragment {
                 {
                     //Si tenemos el modo de accion activado permite seleccionar los elementos
                     seleccionar_Elemento(posicion);
-                    adaptadorAlumnos.notifyItemChanged(posicion);
+                    adaptadorlistacompra.notifyItemChanged(posicion);
                     actualizar_barra();
-                    if(alumnosseleccionados.size()==0)
+                    if(comprasseleccionadas.size()==0)
                     {
                         //Me salgo del action mode
                         salir_actionmode();
@@ -111,7 +173,7 @@ public class ListaCompraFragment extends Fragment {
                 }
             }
         });
-        vista_listaalumnos.setAdapter(adaptadorAlumnos);
+        listado_de_compras_recycler.setAdapter(adaptadorlistacompra);
 
 
 
@@ -119,18 +181,19 @@ public class ListaCompraFragment extends Fragment {
     }
     private void actualizar_barra()
     {
-        barra.getMenu().getItem(0).setVisible(alumnosseleccionados.size()>1?false:true);
-        barra.setTitle(alumnosseleccionados.size()+" Alumnos seleccionados...");
+        //Para mostrar el icono de editar o solo el de eliminar
+        barra.getMenu().getItem(0).setVisible(comprasseleccionadas.size()>1?false:true);
+        barra.setTitle(comprasseleccionadas.size()+" Compras seleccionadas...");
     }
     private void seleccionar_Elemento(int posicion)
     {
-        if(alumnosseleccionados.contains(alumnos.getLista_alumnos().get(posicion)))
+        if(comprasseleccionadas.contains(listadocomprasdatos.get(posicion)))
         {
-            alumnosseleccionados.remove(alumnos.getLista_alumnos().get(posicion));
+            comprasseleccionadas.remove(listadocomprasdatos.get(posicion));
         }
         else
         {
-            alumnosseleccionados.add(alumnos.getLista_alumnos().get(posicion));
+            comprasseleccionadas.add(listadocomprasdatos.get(posicion));
         }
     }
 

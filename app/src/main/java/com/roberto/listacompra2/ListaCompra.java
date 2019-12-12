@@ -4,6 +4,14 @@ import java.util.ArrayList;
 
 public class ListaCompra {
 
+    public String getNombre_lista() {
+        return nombre_lista;
+    }
+
+    public void setNombre_lista(String nombre_lista) {
+        this.nombre_lista = nombre_lista;
+    }
+
     private String nombre_lista;
     private int num_productos;
     private float importe_total;
