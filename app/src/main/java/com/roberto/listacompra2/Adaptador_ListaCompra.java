@@ -25,7 +25,11 @@ public class Adaptador_ListaCompra extends RecyclerView.Adapter<Adaptador_ListaC
 
 
 
-
+    public void añadir_ListaCompra(ListaCompra l)
+    {
+        this.datos.add(l);
+        notifyItemChanged((this.datos.size()-1));
+    }
 
     public Adaptador_ListaCompra(ListaCompraFragment c, int rlayout, ArrayList<ListaCompra> d)
     {
@@ -92,7 +96,7 @@ public class Adaptador_ListaCompra extends RecyclerView.Adapter<Adaptador_ListaC
         holder.listacompra=this.datos.get(position);
         //Asocio los datos de los elementos visuales
         holder.nombre.setText(holder.listacompra.getNombre_lista()+"");
-        holder.num_articulos.setText(holder.listacompra.getNum_productos());
+        holder.num_articulos.setText(holder.listacompra.getNum_productos()+"");
         holder.importe_total.setText(holder.listacompra.getImporte_total()+"");
         holder.vista.setBackgroundResource(R.color.colorFondoElemento);
         //Cambio el color de fondo en funcion de si el elemento esta seleccionado o

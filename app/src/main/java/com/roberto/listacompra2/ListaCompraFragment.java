@@ -1,10 +1,12 @@
 package com.roberto.listacompra2;
 
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -15,9 +17,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 
 /**
@@ -65,6 +75,7 @@ public class ListaCompraFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         comprasseleccionadas=new ArrayList<ListaCompra>();
+        listadocomprasdatos=new ArrayList<ListaCompra>();
         barra=getActivity().findViewById(R.id.toolbar);
         actividadprincipal=(MainActivity)getActivity();
 
@@ -75,6 +86,9 @@ public class ListaCompraFragment extends Fragment {
     }
 
 
+
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -83,6 +97,36 @@ public class ListaCompraFragment extends Fragment {
         View v=inflater.inflate(R.layout.fragment_lista_compra, container, false);
         //Preparo el RecyclerView
         prepararRecyclerView(v);
+        FloatingActionButton fab = v.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+              //Abrir dialogo para añadir una nueva lista de la compra
+                final EditText nombre = new EditText(actividadprincipal);
+                Date currentTime = Calendar.getInstance().getTime();
+
+              nombre.setText("Mi lista de la compra "+currentTime.toString());
+
+                LinearLayout mi_layout = new LinearLayout(actividadprincipal);
+                mi_layout.setOrientation(LinearLayout.VERTICAL);
+                mi_layout.addView(nombre);
+
+
+                new AlertDialog.Builder(actividadprincipal)
+                        .setTitle("CREAR LISTA DE LA COMPRA")
+                        .setCancelable(false)
+                        .setView(mi_layout)
+                        .setPositiveButton("CREAR", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                               ListaCompra l = new ListaCompra(nombre.getText().toString());
+
+                                adaptadorlistacompra.añadir_ListaCompra(l);
+
+                            }
+                        })
+                        .create().show();
+            }
+        });
 
 
 
@@ -124,7 +168,7 @@ public class ListaCompraFragment extends Fragment {
                     actionModeactivado = true;
 
                     //Limpio la barra
-
+                    barra.getMenu().clear();
                     //Inflo el menu de acción contextual
                     barra.inflateMenu(R.menu.menu_action_mode);
                     //Cambio el estilo de la barra
